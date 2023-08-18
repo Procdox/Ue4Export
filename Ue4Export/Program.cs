@@ -18,9 +18,9 @@ namespace Ue4Export
 	{
 		static int Main(string[] args)
 		{
-			if (args.Length != 3)
+			if (args.Length != 4)
 			{
-				Console.WriteLine("Exports a set of files from a UE4 game. Usage:\n\nUe4Export [game asset path] [asset list] [output directory]\n\n  game asset path = path to a directory containing .pak files for a game\n\n  asset list = text file with list of asset paths to export. See readme.md for more details.\n\n  output directory = directory to output exported assets");
+				Console.WriteLine("Exports a set of files from a UE4 game. Usage:\n\nUe4Export [game asset path] [asset list] [output directory] [aes key]\n\n  game asset path = path to a directory containing .pak files for a game\n\n  asset list = text file with list of asset paths to export. See readme.md for more details.\n\n  output directory = directory to output exported assets");
 				return 0;
 			}
 
@@ -51,18 +51,10 @@ namespace Ue4Export
 				return 1;
 			}
 
-			try
-			{
-				DeleteDirectoryContents(outDir);
-			}
-			catch (Exception ex)
-			{
-				logger.Log(LogLevel.Fatal, $"Could not clear output directory \"{outDir}\". [{ex.GetType().FullName}] {ex.Message}");
-				return 1;
-			}
+      string rawAesKey = args[3];
 
 			Exporter exporter = new Exporter(gameDir, outDir, logger);
-			bool success = exporter.Export(assetListPath);
+			bool success = exporter.Export(assetListPath, rawAesKey);
 
 			if (!success)
 			{
@@ -72,7 +64,7 @@ namespace Ue4Export
 			logger.Log(LogLevel.Important, "\nExports complete.");
 
 			// Pause if debugger attached
-			if (System.Diagnostics.Debugger.IsAttached) Console.ReadKey();
+			//if (System.Diagnostics.Debugger.IsAttached) Console.ReadKey();
 
 			return success ? 0 : 2;
 		}

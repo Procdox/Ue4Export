@@ -68,7 +68,7 @@ namespace Ue4Export
 			};
 		}
 
-		public bool Export(string assetListPath)
+		public bool Export(string assetListPath, string rawAesKey)
 		{
 			bool success = true;
 
@@ -76,12 +76,12 @@ namespace Ue4Export
 			{
 				provider.Initialize();
 
+        var aes_key = new FAesKey(rawAesKey);
+
 				foreach (var vfsReader in provider.UnloadedVfs)
 				{
-					provider.SubmitKey(vfsReader.EncryptionKeyGuid, new FAesKey(new byte[32]));
+					provider.SubmitKey(vfsReader.EncryptionKeyGuid, aes_key);
 				}
-
-				provider.LoadMappings(); // Does nothing unless the game is Fortnite (in which case it tries to download type mappings from the web)
 				provider.LoadLocalization(ELanguage.English);
 
 				ExportFormats formats = ExportFormats.Text;
@@ -190,8 +190,8 @@ namespace Ue4Export
 			{
 				if ((formats & ExportFormats.Raw) != 0)
 				{
-					SaveRaw(provider, assetPath);
-					return true;
+					//SaveRaw(provider, assetPath);
+					return false;
 				}
 				if ((formats & ExportFormats.Text) != 0)
 				{
@@ -199,7 +199,7 @@ namespace Ue4Export
 				}
 				if ((formats & ExportFormats.Texture) != 0)
 				{
-					return SaveTexture(provider, assetPath, isBulk);
+					return false; //SaveTexture(provider, assetPath, isBulk);
 				}
 			}
 			catch (Exception ex)
@@ -286,7 +286,7 @@ namespace Ue4Export
 				case "uasset":
 				case "umap":
 					{
-						var exports = provider.LoadObjectExports(assetPath);
+            var exports = provider.LoadObject(assetPath);
 						text = JsonConvert.SerializeObject(exports, mJsonSettings);
 						break;
 					}
@@ -377,7 +377,7 @@ namespace Ue4Export
 				case "":
 				case "uasset":
 					{
-						IEnumerable<UObject> objects = provider.LoadObjectExports(assetPath);
+						IEnumerable<UObject> objects = provider.LoadAllObjects(assetPath);
 
 						bool textureFound = false;
 						bool success = true;
