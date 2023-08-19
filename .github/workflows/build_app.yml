@@ -30,6 +30,8 @@ jobs:
         dotnet-version: ${{ matrix.dotnet-version }}
     - name: build
       run: |
+        dotnet build ./CUE4Parse/CUE4Parse-Conversion/CUE4Parse-Conversion.csproj /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary --configuration Release
+        dotnet build ./CUE4Parse/CUE4Parse/CUE4Parse.csproj /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary --configuration Release
         dotnet build ./Ue4Export/Ue4Export.csproj /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary --configuration Release
         Compress-Archive ./Ue4Export/bin/Debug/net6.0/* ./ue4export.zip
     - name: release
