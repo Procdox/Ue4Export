@@ -30,7 +30,7 @@ jobs:
         dotnet-version: ${{ matrix.dotnet-version }}
     - name: build
       run: |
-        dotnet build ./Ue4Export/Ue4Export.sln --configuration Release --no-restore /property:GenerateFullPaths=true
+        dotnet build ./Ue4Export.sln --configuration Release --no-restore /property:GenerateFullPaths=true
         Compress-Archive ./Ue4Export/bin/Debug/net6.0/* ./ue4export.zip
     - name: release
       id: create_release
