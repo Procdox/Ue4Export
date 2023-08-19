@@ -20,7 +20,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        dotnet-version: [ '3.1.x', '6.0.x' ]
+        dotnet-version: [ '6.0.x' ]
     steps:
     - name: checkout code
       uses: actions/checkout@v3
