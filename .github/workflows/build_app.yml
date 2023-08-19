@@ -28,8 +28,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
-    - name: install dependencies
-      run: dotnet restore
     - name: build
       run: |
         dotnet build ./Ue4Export/Ue4Export.sln --configuration Release --no-restore /property:GenerateFullPaths=true
