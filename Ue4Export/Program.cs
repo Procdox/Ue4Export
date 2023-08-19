@@ -20,7 +20,7 @@ namespace Ue4Export
 		{
 			if (args.Length != 4)
 			{
-				Console.WriteLine("Exports a set of files from a UE4 game. Usage:\n\nUe4Export [game asset path] [asset list] [output directory] [aes key]\n\n  game asset path = path to a directory containing .pak files for a game\n\n  asset list = text file with list of asset paths to export. See readme.md for more details.\n\n  output directory = directory to output exported assets");
+				Console.WriteLine("Exports a set of files from a UE4 game. Usage:\n\nUe4Export [game asset path] [asset path] [output directory] [aes key]\n\n  game asset path = path to a directory containing .pak files for a game\n\n  asset path = asset path to export. See readme.md for more details.\n\n  output directory = directory to output exported assets");
 				return 0;
 			}
 
@@ -33,28 +33,12 @@ namespace Ue4Export
 				return 1;
 			}
 
-			string assetListPath = args[1];
-			if (!File.Exists(assetListPath))
-			{
-				logger.Log(LogLevel.Fatal, $"Could not access asset list \"{assetListPath}\"");
-				return 1;
-			}
-
+			string assetPath = args[1];
 			string outDir = args[2];
-			try
-			{
-				Directory.CreateDirectory(outDir);
-			}
-			catch (Exception ex)
-			{
-				logger.Log(LogLevel.Fatal, $"Could not access/create output directory \"{outDir}\". [{ex.GetType().FullName}] {ex.Message}");
-				return 1;
-			}
-
       string rawAesKey = args[3];
 
 			Exporter exporter = new Exporter(gameDir, outDir, logger);
-			bool success = exporter.Export(assetListPath, rawAesKey);
+			bool success = exporter.Export(assetPath, rawAesKey);
 
 			if (!success)
 			{
@@ -67,21 +51,6 @@ namespace Ue4Export
 			//if (System.Diagnostics.Debugger.IsAttached) Console.ReadKey();
 
 			return success ? 0 : 2;
-		}
-
-		private static void DeleteDirectoryContents(string path)
-		{
-			DirectoryInfo directory = new DirectoryInfo(path);
-
-			foreach (FileInfo file in directory.EnumerateFiles("*", SearchOption.AllDirectories))
-			{
-				file.Delete();
-			}
-
-			foreach (DirectoryInfo dir in directory.EnumerateDirectories("*", SearchOption.AllDirectories).Reverse())
-			{
-				dir.Delete();
-			}
 		}
 	}
 }

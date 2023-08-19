@@ -1,0 +1,53 @@
+name: Build Release
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - '**/README.md'
+
+permissions:
+  contents: write
+  id-token: write
+  issues: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '3.1.x', '6.0.x' ]
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v3
+    - name: setup dotnet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+    - name: install dependencies
+      run: dotnet restore
+    - name: build
+      run: |
+        dotnet build --configuration Release --no-restore
+        Compress-Archive ./Ue4Export/bin/Debug/net6.0/* ./ue4export.zip
+    - name: release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        tag_name: 1.0.1
+        release_name: Release 1.0.1
+    - name: push exe to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./ue4export.zip
+        asset_name: ue4export.zip
+        asset_content_type: application/zip
