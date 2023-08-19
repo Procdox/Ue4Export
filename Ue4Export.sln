@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ue4Export", "Ue4Export\Ue4E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CUE4Parse", "CUE4Parse\CUE4Parse\CUE4Parse.csproj", "{704783F0-0348-4F91-945E-AC9CF03DAEFD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CUE4Parse-Natives", "CUE4Parse\CUE4Parse-Natives\builddir\CUE4Parse-Natives.vcxproj", "{9E289AC9-9029-3B8D-B976-9115A298CCF8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CUE4Parse-Conversion", "CUE4Parse\CUE4Parse-Conversion\CUE4Parse-Conversion.csproj", "{949C0A63-0FA8-426D-AEF5-16B8A5E843C3}"
 EndProject
 Global
