@@ -74,7 +74,7 @@ namespace Ue4Export
 		{
 			bool success = true;
 
-			using (var provider = new DefaultFileProvider(mGameDir, SearchOption.TopDirectoryOnly))
+			using (var provider = new DefaultFileProvider(mGameDir, SearchOption.TopDirectoryOnly, false, new VersionContainer(EGame.GAME_UE4_25)))
 			{
 				provider.Initialize();
 
